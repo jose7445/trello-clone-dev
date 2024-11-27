@@ -1,7 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* globals.css */
+@import "primeicons/primeicons.css";
+@import "primereact/resources/themes/saga-blue/theme.css" layer(primereact);
 
-/* Estilos de PrimeReact */
-@import "primereact/resources/themes/lara-light-indigo/theme.css"; /* Cambia el tema según prefieras */
-@import "primereact/resources/primereact.min.css";
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-components {
+  @tailwind components;
+}
+
+@layer tailwind-utilities {
+  @tailwind utilities;
+}

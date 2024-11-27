@@ -9,7 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import Link from "next/link";
 function RegisterPage() {
   const toast = useRef(null);
   const router = useRouter();
@@ -80,7 +80,7 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
         <div className="text-center mb-6">
           <h2 className="text-gray-900 text-3xl font-bold mb-2">Register</h2>
@@ -208,13 +208,6 @@ function RegisterPage() {
               </div>
 
               <Toast ref={toast} />
-
-              <div className="flex justify-end mb-6">
-                <a href="#" className="text-sm text-blue-500 hover:underline">
-                  Forgot your password?
-                </a>
-              </div>
-
               <Button
                 type="submit"
                 label="Register"
@@ -225,6 +218,12 @@ function RegisterPage() {
           )}
         </Formik>
       </div>
+      <Link
+        href="/"
+        className="text-sm text-blue-500 hover:underline mt-4 font-bold"
+      >
+        Back home
+      </Link>
     </div>
   );
 }

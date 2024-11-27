@@ -6,7 +6,11 @@ import React from "react";
 function DashboardPage() {
   const { data: session, status } = useSession();
   console.log(session, status);
-  return <div>DashboardPage</div>;
+  return (
+    <div>
+      <pre>{JSON.stringify(session, null, 2)}</pre>
+    </div>
+  );
 }
 
 export default DashboardPage;
