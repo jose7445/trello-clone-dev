@@ -6,7 +6,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      required: [true, "Email es requerido"],
+      required: [true, "Email is required"],
       match: [
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         "El correo electrónico no es válido",
@@ -14,14 +14,14 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "La contraseña es requerida"],
+      required: [true, "Password is required"],
       select: false, // Esto evita que la contraseña se retorne en las respuestas de la API
-      minlength: [6, "La contraseña debe tener al menos 6 caracteres"],
+      minlength: [6, "Password must be at least 6 characters"],
     },
     fullname: {
       type: String,
-      required: [true, "El nombre completo es requerido"],
-      minlength: [3, "El nombre completo debe tener al menos 3 caracteres"],
+      required: [true, "Full name is required"],
+      minlength: [3, "Full name must be at least 3 characters"],
     },
   },
   {

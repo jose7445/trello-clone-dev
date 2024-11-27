@@ -1,11 +1,7 @@
-/* Importa el tema de PrimeReact primero */
-@import "primereact/resources/themes/lara-light-blue/theme.css";
-
-/* Tailwind base styles */
 @tailwind base;
-
-/* Tailwind component utilities */
 @tailwind components;
-
-/* Tailwind utility classes */
 @tailwind utilities;
+
+/* Estilos de PrimeReact */
+@import "primereact/resources/themes/lara-light-indigo/theme.css"; /* Cambia el tema según prefieras */
+@import "primereact/resources/primereact.min.css";
