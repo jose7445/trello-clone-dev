@@ -1,21 +1,11 @@
+/* Importa el tema de PrimeReact primero */
+@import "primereact/resources/themes/lara-light-blue/theme.css";
+
+/* Tailwind base styles */
 @tailwind base;
+
+/* Tailwind component utilities */
 @tailwind components;
+
+/* Tailwind utility classes */
 @tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
