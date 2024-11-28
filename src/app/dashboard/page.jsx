@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import AddTask from "./_components/AddTask";
+import AddTask from "./_components/AddTaskForm";
 import { toast } from "react-hot-toast";
 const DashboardPage = () => {
   const { data: session } = useSession();
