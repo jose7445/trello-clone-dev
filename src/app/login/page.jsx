@@ -8,7 +8,6 @@ import { Toast } from "primereact/toast";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
-import Link from "next/link";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -82,7 +81,7 @@ const LoginForm = () => {
         handleSubmit,
         isSubmitting,
       }) => (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
+        <div className="flex flex-col items-center justify-center ">
           <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
             <div className="text-center mb-6">
               <h2 className="text-gray-900 text-3xl font-bold mb-2">Log in</h2>
@@ -151,12 +150,6 @@ const LoginForm = () => {
               />
             </form>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-blue-500 hover:underline mt-4 font-semibold"
-          >
-            Back home
-          </Link>
         </div>
       )}
     </Formik>

@@ -1,15 +1,30 @@
-/* globals.css */
-@import "primeicons/primeicons.css";
+/*
+@layer tailwind-base, primereact, tailwind-utilities;
+
 @import "primereact/resources/themes/saga-blue/theme.css" layer(primereact);
 
 @layer tailwind-base {
   @tailwind base;
 }
 
-@layer tailwind-components {
+@layer tailwind-utilities {
   @tailwind components;
+  @tailwind utilities;
 }
 
-@layer tailwind-utilities {
-  @tailwind utilities;
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos de PrimeReact */
+@import "primereact/resources/themes/lara-light-indigo/theme.css"; /* Cambia el tema según prefieras */
+@import "primereact/resources/primereact.min.css";
+
+.p-menubar {
+  padding: 0.5rem;
+  background: #ffff;
+  color: #4b5563;
+  border: 1px solid #ffff;
 }
