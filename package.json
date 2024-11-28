@@ -9,22 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/cache": "^11.13.5",
+    "@chakra-ui/react": "^3.2.1",
     "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
-    "@mui/icons-material": "^6.1.9",
-    "@mui/material": "^6.1.9",
-    "@mui/material-nextjs": "^5.16.8",
-    "@mui/styled-engine-sc": "^6.1.9",
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "formik": "^2.4.6",
     "mongoose": "^8.8.3",
     "next": "15.0.3",
     "next-auth": "^4.24.10",
+    "next-themes": "^0.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^6.1.13",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -32,6 +29,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "5.7.2"
   }
 }

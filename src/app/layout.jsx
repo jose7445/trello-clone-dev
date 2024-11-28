@@ -1,8 +1,9 @@
 import "./globals.css";
 import Providers from "./utils/Providers";
+import { Provider } from "@/components/ui/provider";
 import { Barlow } from "next/font/google";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import NavBar from "./components/navbar";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Create Next App",
@@ -18,10 +19,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${barlow.className} antialiased h-screen bg-slate-100`}>
-        <Providers>
-          <NavBar />
-          <main className="pt-10 pb-40 bg-slate-100">{children}</main>
-        </Providers>
+        <Provider>
+          <Providers>
+            <NavBar />
+            <Toaster position="bottom-center" reverseOrder={false} />
+            <main className="pt-10 pb-20 bg-slate-100">{children}</main>
+          </Providers>
+        </Provider>
       </body>
     </html>
   );

@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Button from "@mui/material/Button";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 import "./globals.css";
 
 export default function Home() {

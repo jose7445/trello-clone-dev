@@ -2,15 +2,19 @@
 
 import React, { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
-import Button from "@mui/material/Button";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
-import TextField from "@mui/material/TextField";
+import { Input } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
+import {
+  PasswordInput,
+  PasswordStrengthMeter,
+} from "@/components/ui/password-input";
+import { toast } from "react-hot-toast";
 
 const LoginForm = () => {
   const router = useRouter();
-  const toast = useRef(null);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -35,10 +39,11 @@ const LoginForm = () => {
       });
 
       if (!res.ok) {
-        console.log(res);
+        toast.error(res.error || "Invalid Credentials"); // Muestra un toast de error
         throw new Error(res.error || "Invalid Credentials");
       } else {
         console.log(res);
+        toast.success("Login successful! Redirecting...");
         setTimeout(() => {
           router.push("/dashboard");
         }, 2000);
@@ -93,13 +98,13 @@ const LoginForm = () => {
                 >
                   Email
                 </label>
-                <TextField
+                <Input
                   type="email"
                   name="email"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  className="w-full"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.email && touched.email && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -115,13 +120,13 @@ const LoginForm = () => {
                 >
                   Password
                 </label>
-                <TextField
+                <PasswordInput
                   type="password"
                   name="password"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
-                  className="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.password && touched.password && (
                   <div className="text-red-700 text-xs font-semibold mt-1">

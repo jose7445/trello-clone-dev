@@ -2,13 +2,17 @@
 
 import React, { useRef } from "react";
 import { signIn } from "next-auth/react";
-import Button from "@mui/material/Button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import TextField from "@mui/material/TextField";
-
+import { Input } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
+import {
+  PasswordInput,
+  PasswordStrengthMeter,
+} from "@/components/ui/password-input";
+import { toast } from "react-hot-toast";
 function RegisterPage() {
   const router = useRouter();
 
@@ -44,19 +48,23 @@ function RegisterPage() {
         redirect: false,
       });
 
-      if (res?.ok) {
+      if (!res?.ok) {
+        toast.error(res.error || "Invalid register"); // Muestra un toast de error
+        throw new Error(res.error || "Invalid register");
+      } else {
         //toast
+        console.log(res);
+        toast.success("Register successful! Redirecting...");
         setTimeout(() => {
           router.push("/dashboard");
         }, "2000");
-      } else {
-        //toast
       }
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
         : "An unexpected error occurred";
       //toast
+      toast.error(errorMessage || "Invalid register"); // Muestra un toast de error
     } finally {
       setSubmitting(false);
     }
@@ -105,14 +113,14 @@ function RegisterPage() {
                 >
                   Full Name
                 </label>
-                <TextField
+                <Input
                   id="fullname"
                   type="text"
                   name="fullname"
                   value={values.fullname}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.fullname && touched.fullname && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -128,14 +136,14 @@ function RegisterPage() {
                 >
                   Email
                 </label>
-                <TextField
+                <Input
                   id="email"
                   type="email"
                   name="email"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.email && touched.email && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -151,14 +159,14 @@ function RegisterPage() {
                 >
                   Password
                 </label>
-                <TextField
+                <PasswordInput
                   id="password"
                   type="password"
                   name="password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.password && touched.password && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -174,14 +182,14 @@ function RegisterPage() {
                 >
                   Confirm Password
                 </label>
-                <TextField
+                <PasswordInput
                   id="confirmPassword"
                   type="password"
                   name="confirmPassword"
                   value={values.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
                   <div className="text-red-700 text-xs font-semibold mt-1">

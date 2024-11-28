@@ -1,95 +1,93 @@
+// DashboardPage.js
+
 "use client";
-
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { useState, useEffect } from "react";
-import CreateBoard from "./_components/CreateBoard";
-import BoardPage from "./_components/BoardPage";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#fff",
-  borderRadius: "8px",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  padding: "16px",
-  border: "none",
-};
-
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import AddTask from "./_components/AddTask";
+import { toast } from "react-hot-toast";
 const DashboardPage = () => {
-  const [open, setOpen] = useState(false);
-  const [boards, setBoards] = useState([]); // Estado para los boards
+  const { data: session } = useSession();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
-  useEffect(() => {
-    // Hacer la petición GET para obtener los boards
-    const fetchBoards = async () => {
-      try {
-        const response = await fetch("/api/boards"); // Ajusta la URL de acuerdo a tu ruta
-        const data = await response.json();
-        if (response.ok) {
-          console.log(data);
-          setBoards(data); // Guardar los boards en el estado
-        } else {
-          console.error("Error al obtener los boards", data);
-        }
-      } catch (error) {
-        console.error("Hubo un error al cargar los boards", error);
-      } finally {
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const ownerId = session.user.id;
+      const taskDataWithOwner = {
+        ...values,
+        owner: ownerId,
+      };
+      const res = await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskDataWithOwner),
+      });
+
+      if (!res.ok) {
+        toast.error(res.error || "Failed to add task"); // Muestra un toast de error
+        throw new Error(res.error || "Failed to add task");
+      } else {
+        const data = await res.json();
+        toast.success("Task added");
+        handleModalClose(true);
+
+        setSubmitting(false);
       }
-    };
-
-    fetchBoards(); // Llamada a la API cuando el componente se monta
-  }, []);
+    } catch (error) {
+      console.error("Error adding task:", error);
+      setErrors({ submit: error.message });
+    }
+  };
 
   return (
-    <div>
-      <div className="flex items-center justify-center flex-col">
-        {boards.length > 0 ? (
-          // Si hay boards, mostrar los boards
-          boards.map((board) => <BoardPage key={board.id} board={board} />)
-        ) : (
-          // Si no hay boards, mostrar el mensaje y el botón de crear
-          <>
-            <div className="text-sm md:text-lg text-neutral-500 max-w-xs md:max-w-2xl text-center mb-4">
-              You do not have any boards yet. Time to start organizing!
-            </div>
+    <div className="px-6">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl md:text-4xl text-left text-neutral-800 font-bold">
+          Board 1
+        </h1>
+        <Button
+          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleModalOpen}
+        >
+          ADD TASK
+        </Button>
+      </div>
 
-            <Button
-              onClick={handleOpen}
-              className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-            >
-              CREATE BOARD
-            </Button>
+      {/* Modal */}
+      <AddTask
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSubmit={handleSubmit}
+      />
 
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography
-                  id="modal-modal-title"
-                  variant="h6"
-                  component="h2"
-                  className="text-gray-700 font-semibold"
-                >
-                  CREATE BOARD
-                </Typography>
-                {/* Pasar la función handleClose como prop a CreateBoard */}
-                <CreateBoard closeModal={handleClose} />
-              </Box>
-            </Modal>
-          </>
-        )}
+      <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* To Do Column */}
+        <div className="bg-slate-200 p-4 rounded shadow-sm">
+          <h3 className="text-lg font-medium text-neutral-700">To Do</h3>
+          <div className="mt-3 space-y-2"></div>
+        </div>
+
+        {/* In Progress Column */}
+        <div className="bg-slate-200 p-4 rounded shadow-sm">
+          <h3 className="text-lg font-medium text-neutral-700">In Progress</h3>
+          <div className="mt-3 space-y-2"></div>
+        </div>
+
+        {/* Done Column */}
+        <div className="bg-slate-200 p-4 rounded shadow-sm">
+          <h3 className="text-lg font-medium text-neutral-700">Done</h3>
+          <div className="mt-3 space-y-2"></div>
+        </div>
       </div>
     </div>
   );
