@@ -1,6 +1,29 @@
 import { NextResponse } from "next/server";
 import Task from "@/models/task"; // El modelo de tarea
 import { connectDB } from "@/libs/mongodb"; // Conexión a la base de datos
+import { getSession } from "next-auth/react"; // NextAuth
+
+export async function GET(request) {
+  try {
+    // Conectamos a la base de datos
+    await connectDB();
+
+    // Obtener la sesión del usuario
+
+    // Filtrar tareas basadas en el `owner` del usuario que tiene sesión iniciada
+    const tasks = await Task.find();
+
+    // Respondemos con las tareas obtenidas
+    return NextResponse.json(tasks, { status: 200 });
+  } catch (error) {
+    // Manejo de errores generales
+    console.error(error);
+    return NextResponse.json(
+      { message: "An unexpected error occurred" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request) {
   try {
@@ -25,6 +48,8 @@ export async function POST(request) {
       state,
       owner,
     });
+
+    console.log(newTask);
 
     // Guardamos la tarea
     const savedTask = await newTask.save();

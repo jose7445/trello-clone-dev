@@ -119,6 +119,7 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit }) => {
                       name="state"
                       value={values.state}
                       onChange={handleChange}
+                      placeholder="Select option"
                       className="h-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     >
                       <option value="to do">To Do</option>
