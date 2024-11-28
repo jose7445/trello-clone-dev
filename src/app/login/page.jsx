@@ -70,7 +70,7 @@ const LoginForm = () => {
         handleSubmit,
         isSubmitting,
       }) => (
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center pt-10 pb-40">
           <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
             <div className="text-center mb-6">
               <h2 className="text-gray-900 text-3xl font-bold mb-2">Log in</h2>

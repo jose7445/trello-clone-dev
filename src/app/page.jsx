@@ -1,12 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@mui/material/Button";
-
+import { useSession } from "next-auth/react";
 import "./globals.css";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
   return (
-    <div className="flex items-center justify-center flex-col">
+    <div className="flex items-center justify-center flex-col pt-40 pb-20">
       <div className="flex items-center justify-center flex-col">
         <div className="flex items-center justify-center">
           <h1 className="text-3xl md:text-6xl text-center text-neutral-800 font-bold">
@@ -32,11 +36,23 @@ export default function Home() {
         management app, perfect for teams and individuals alike!
       </div>
 
-      <Link href="/login">
-        <Button className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
-          JOIN US
-        </Button>
-      </Link>
+      {session ? (
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard">
+            <Button className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+              DASHBOARD
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <Link href="/login">
+            <Button className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+              JOIN US
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

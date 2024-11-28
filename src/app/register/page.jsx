@@ -7,9 +7,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
 
 function RegisterPage() {
-  const toast = useRef(null);
   const router = useRouter();
 
   // Validación con Yup
@@ -63,7 +63,7 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center pt-10 pb-40">
       <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
         <div className="text-center mb-6">
           <h2 className="text-gray-900 text-3xl font-bold mb-2">Register</h2>
@@ -105,14 +105,14 @@ function RegisterPage() {
                 >
                   Full Name
                 </label>
-                <input
+                <TextField
                   id="fullname"
                   type="text"
                   name="fullname"
                   value={values.fullname}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.fullname && touched.fullname && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -128,14 +128,14 @@ function RegisterPage() {
                 >
                   Email
                 </label>
-                <input
+                <TextField
                   id="email"
                   type="email"
                   name="email"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.email && touched.email && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -151,14 +151,14 @@ function RegisterPage() {
                 >
                   Password
                 </label>
-                <input
+                <TextField
                   id="password"
                   type="password"
                   name="password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.password && touched.password && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -174,14 +174,14 @@ function RegisterPage() {
                 >
                   Confirm Password
                 </label>
-                <input
+                <TextField
                   id="confirmPassword"
                   type="password"
                   name="confirmPassword"
                   value={values.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
                   <div className="text-red-700 text-xs font-semibold mt-1">

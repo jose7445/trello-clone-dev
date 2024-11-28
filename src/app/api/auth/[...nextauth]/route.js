@@ -32,7 +32,8 @@ const handler = NextAuth({
         // Buscar el usuario en la base de datos
         const userFound = await User.findOne({
           email: credentials.email,
-        }).select("+password");
+        }).select("+password"); // Incluye el campo 'password' al consultar el usuario
+
         if (!userFound) throw new Error(ERROR_INVALID_CREDENTIALS);
 
         // Validar la contraseña
@@ -44,7 +45,7 @@ const handler = NextAuth({
 
         // Retornar el usuario encontrado (omitimos la contraseña)
         return {
-          id: userFound._id,
+          id: userFound._id.toString(), // Asegúrate de convertir _id a string
           email: userFound.email,
           fullname: userFound.fullname,
         };
@@ -56,13 +57,16 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user; // Agregar datos del usuario al token
+        // Agregar datos del usuario al token (se puede acceder en el callback de la sesión)
+
+        token.user = user;
       }
       return token;
     },
 
     async session({ session, token }) {
-      session.user = token.user; // Transferir datos del token a la sesión
+      // Transferir datos del token a la sesión (esto estará disponible en la sesión)
+      session.user = token.user;
       return session;
     },
   },
