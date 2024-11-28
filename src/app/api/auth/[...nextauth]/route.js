@@ -1,4 +1,5 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
+
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/user";
 import { connectDB } from "@/libs/mongodb";
@@ -7,45 +8,37 @@ import bcrypt from "bcryptjs";
 // Mensajes de error centralizados
 const ERROR_INVALID_CREDENTIALS = "Invalid credentials";
 
-const handler = NextAuth({
-  // Configuración de proveedores
+// Configuración de NextAuth
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "your-email@example.com",
-        },
-        password: { label: "Password", type: "password", placeholder: "****" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Validación inicial de credenciales
         if (!credentials?.email || !credentials?.password) {
           throw new Error(ERROR_INVALID_CREDENTIALS);
         }
 
-        // Conexión a la base de datos
         await connectDB();
 
-        // Buscar el usuario en la base de datos
         const userFound = await User.findOne({
           email: credentials.email,
-        }).select("+password"); // Incluye el campo 'password' al consultar el usuario
+        }).select("+password");
 
         if (!userFound) throw new Error(ERROR_INVALID_CREDENTIALS);
 
-        // Validar la contraseña
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           userFound.password
         );
+
         if (!passwordMatch) throw new Error(ERROR_INVALID_CREDENTIALS);
 
-        // Retornar el usuario encontrado (omitimos la contraseña)
         return {
-          id: userFound._id.toString(), // Asegúrate de convertir _id a string
+          id: userFound._id.toString(),
           email: userFound.email,
           fullname: userFound.fullname,
         };
@@ -53,33 +46,26 @@ const handler = NextAuth({
     }),
   ],
 
-  // Callbacks personalizados
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ user, token }) {
       if (user) {
-        // Agregar datos del usuario al token (se puede acceder en el callback de la sesión)
-
-        token.user = user;
+        // Note that this if condition is needed
+        token.user = { ...user };
       }
       return token;
     },
-
     async session({ session, token }) {
-      // Transferir datos del token a la sesión (esto estará disponible en la sesión)
-      session.user = token.user;
+      if (token?.user) {
+        // Note that this if condition is needed
+        session.user = token.user;
+      }
       return session;
     },
   },
-
-  // Páginas personalizadas
-  pages: {
-    signIn: "/login", // Ruta de inicio de sesión
-  },
-
-  // Configuración adicional
   session: {
-    strategy: "jwt", // Uso de JWT para sesiones
+    strategy: "jwt",
   },
-});
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

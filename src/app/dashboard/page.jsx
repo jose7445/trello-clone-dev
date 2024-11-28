@@ -34,11 +34,10 @@ const DashboardPage = () => {
       const data = await res.json();
 
       // Filtrar las tareas según su estado
-      const todoTasks = data.filter((task) => task.state === "to do");
-      const inProgressTasks = data.filter(
-        (task) => task.state === "in progress"
-      );
-      const doneTasks = data.filter((task) => task.state === "done");
+      const todoTasks = data.filter((task) => task.state === "to do") || [];
+      const inProgressTasks =
+        data.filter((task) => task.state === "in progress") || [];
+      const doneTasks = data.filter((task) => task.state === "done") || [];
 
       setTasks({
         todo: todoTasks,

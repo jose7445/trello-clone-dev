@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import Task from "@/models/task"; // El modelo de tarea
 import { connectDB } from "@/libs/mongodb"; // Conexión a la base de datos
-import { getSession } from "next-auth/react"; // NextAuth
+import { getServerSession } from "next-auth"; // Importar getSession
+import { authOptions } from "../auth/[...nextauth]/route"; // Asegúrate de importar las opciones de autenticación correctamente
 
 export async function GET(request) {
   try {
@@ -9,9 +10,18 @@ export async function GET(request) {
     await connectDB();
 
     // Obtener la sesión del usuario
+    const session = await getServerSession(authOptions);
+
+    const tasks = await Task.find({ owner: session.user.id }); // Asume que tienes 'owner' como el campo de identificación del usuario
+
+    if (!session) {
+      return NextResponse.json(
+        { message: "No session found" },
+        { status: 401 }
+      );
+    }
 
     // Filtrar tareas basadas en el `owner` del usuario que tiene sesión iniciada
-    const tasks = await Task.find();
 
     // Respondemos con las tareas obtenidas
     return NextResponse.json(tasks, { status: 200 });
