@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "primereact/button";
+import Button from "@mui/material/Button";
 
 import "./globals.css";
 
@@ -12,9 +12,7 @@ export default function Home() {
           <h1 className="text-3xl md:text-6xl text-center text-neutral-800 font-bold">
             Planify
           </h1>
-          <h2 className="text-lg md:text-lg text-center text-neutral-600 font-semibold ml-4">
-            powered by
-          </h2>
+
           <div>
             <Image
               src="/logo.webp"
@@ -29,16 +27,15 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="text-sm md:text-lg text-neutral-400  max-w-xs md:max-w-2xl text-center mb-4">
+      <div className="text-sm md:text-lg text-neutral-500  max-w-xs md:max-w-2xl text-center mb-4">
         Stay organized and boost productivity with our collaborative task
         management app, perfect for teams and individuals alike!
       </div>
 
       <Link href="/login">
-        <Button
-          label="JOIN US"
-          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-        ></Button>
+        <Button className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+          JOIN US
+        </Button>
       </Link>
     </div>
   );

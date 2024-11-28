@@ -2,9 +2,7 @@
 
 import React, { useRef } from "react";
 import { signIn } from "next-auth/react";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
+import Button from "@mui/material/Button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
@@ -47,33 +45,18 @@ function RegisterPage() {
       });
 
       if (res?.ok) {
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Login success!",
-          life: 3000,
-        });
+        //toast
         setTimeout(() => {
           router.push("/dashboard");
         }, "2000");
       } else {
-        toast.current.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Authentication failed",
-          life: 3000,
-        });
+        //toast
       }
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
         : "An unexpected error occurred";
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: errorMessage,
-        life: 3000,
-      });
+      //toast
     } finally {
       setSubmitting(false);
     }
@@ -122,7 +105,7 @@ function RegisterPage() {
                 >
                   Full Name
                 </label>
-                <InputText
+                <input
                   id="fullname"
                   type="text"
                   name="fullname"
@@ -145,7 +128,7 @@ function RegisterPage() {
                 >
                   Email
                 </label>
-                <InputText
+                <input
                   id="email"
                   type="email"
                   name="email"
@@ -168,7 +151,7 @@ function RegisterPage() {
                 >
                   Password
                 </label>
-                <InputText
+                <input
                   id="password"
                   type="password"
                   name="password"
@@ -191,7 +174,7 @@ function RegisterPage() {
                 >
                   Confirm Password
                 </label>
-                <InputText
+                <input
                   id="confirmPassword"
                   type="password"
                   name="confirmPassword"
@@ -207,13 +190,13 @@ function RegisterPage() {
                 )}
               </div>
 
-              <Toast ref={toast} />
               <Button
                 type="submit"
-                label="Register"
                 className="w-full text-center py-2 px-4 bg-primary text-white font-medium rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isSubmitting}
-              />
+              >
+                REGISTER
+              </Button>
             </form>
           )}
         </Formik>

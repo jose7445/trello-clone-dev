@@ -2,12 +2,11 @@
 
 import React, { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
+import Button from "@mui/material/Button";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -36,20 +35,10 @@ const LoginForm = () => {
       });
 
       if (!res.ok) {
-        toast.current.show({
-          severity: "error",
-          summary: "Error",
-          detail: res.error,
-          life: 3000,
-        });
+        console.log(res);
         throw new Error(res.error || "Invalid Credentials");
       } else {
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Login success!",
-          life: 3000,
-        });
+        console.log(res);
         setTimeout(() => {
           router.push("/dashboard");
         }, 2000);
@@ -100,17 +89,17 @@ const LoginForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-bold text-gray-900"
+                  className="block mb-2 text-sm font-semibold text-gray-700"
                 >
                   Email
                 </label>
-                <InputText
+                <TextField
                   type="email"
                   name="email"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full"
                 />
                 {errors.email && touched.email && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -122,17 +111,17 @@ const LoginForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-bold text-gray-900"
+                  className="block mb-2 text-sm font-semibold text-gray-700"
                 >
                   Password
                 </label>
-                <InputText
+                <TextField
                   type="password"
                   name="password"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.password && touched.password && (
                   <div className="text-red-700 text-xs font-semibold mt-1">
@@ -141,13 +130,13 @@ const LoginForm = () => {
                 )}
               </div>
 
-              <Toast ref={toast} />
               <Button
                 type="submit"
-                label="Log in"
                 className="w-full text-center py-2 px-4 bg-primary text-white font-medium rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isSubmitting}
-              />
+              >
+                LOG IN
+              </Button>
             </form>
           </div>
         </div>

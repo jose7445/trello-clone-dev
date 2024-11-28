@@ -1,7 +1,7 @@
 import "./globals.css";
 import Providers from "./utils/Providers";
 import { Barlow } from "next/font/google";
-
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import NavBar from "./_components/navbar";
 
 export const metadata = {
@@ -18,10 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${barlow.className} antialiased h-screen bg-slate-100`}>
-        <NavBar />
-        <main className="pt-40 pb-20bg-slate-100">
-          <Providers>{children}</Providers>
-        </main>
+        <Providers>
+          <NavBar />
+          <main className="pt-40 pb-20bg-slate-100">{children}</main>
+        </Providers>
       </body>
     </html>
   );
