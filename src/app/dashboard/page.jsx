@@ -9,6 +9,7 @@ import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo compone
 const DashboardPage = () => {
   const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null); // Nueva tarea seleccionada
   const [tasks, setTasks] = useState({
     todo: [],
     inProgress: [],
@@ -17,9 +18,11 @@ const DashboardPage = () => {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setSelectedTask(null); // Limpia la tarea seleccionada
   };
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (task = null) => {
+    setSelectedTask(task); // Establece la tarea seleccionada (si existe)
     setIsModalOpen(true);
   };
 
@@ -58,33 +61,36 @@ const DashboardPage = () => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      console.log(values);
+      const url = selectedTask
+        ? `/api/tasks/${selectedTask._id}` // Para edición
+        : "/api/tasks"; // Para creación
+
       const ownerId = session.user.id;
       const taskDataWithOwner = {
         ...values,
-        owner: ownerId,
+        owner: ownerId, // No es necesario enviar el `id`, solo los campos
       };
-      const res = await fetch("/api/tasks", {
-        method: "POST",
+
+      const method = selectedTask ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(taskDataWithOwner),
       });
 
-      if (!res.ok) {
-        toast.error(res.error || "Failed to add task");
-        throw new Error(res.error || "Failed to add task");
-      } else {
-        const data = await res.json();
-        toast.success("Task added");
-        handleModalClose(true);
-        setSubmitting(false);
-        fetchTasks(); // Recargar tareas al agregar una nueva
-      }
+      if (!res.ok) throw new Error(res.statusText);
+
+      toast.success(selectedTask ? "Task updated" : "Task added");
+      fetchTasks(); // Recargar tareas
+      handleModalClose();
     } catch (error) {
-      console.error("Error adding task:", error);
+      console.error("Error saving task:", error);
       setErrors({ submit: error.message });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -96,7 +102,7 @@ const DashboardPage = () => {
         </h1>
         <Button
           className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleModalOpen}
+          onClick={() => handleModalOpen()}
         >
           ADD TASK
         </Button>
@@ -107,19 +113,22 @@ const DashboardPage = () => {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSubmit={handleSubmit}
+        task={selectedTask} // Pasa la tarea seleccionada al formulario
       />
 
       {/* Columnas de tareas */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="flex flex-col space-y-4">
-          <TaskColumns title="To Do" tasks={tasks.todo} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <TaskColumns title="In Progress" tasks={tasks.inProgress} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <TaskColumns title="Done" tasks={tasks.done} />
-        </div>
+        <TaskColumns
+          title="To Do"
+          tasks={tasks.todo}
+          onEdit={handleModalOpen}
+        />
+        <TaskColumns
+          title="In Progress"
+          tasks={tasks.inProgress}
+          onEdit={handleModalOpen}
+        />
+        <TaskColumns title="Done" tasks={tasks.done} onEdit={handleModalOpen} />
       </div>
     </div>
   );

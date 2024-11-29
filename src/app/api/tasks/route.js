@@ -21,8 +21,6 @@ export async function GET(request) {
       );
     }
 
-    // Filtrar tareas basadas en el `owner` del usuario que tiene sesión iniciada
-
     // Respondemos con las tareas obtenidas
     return NextResponse.json(tasks, { status: 200 });
   } catch (error) {

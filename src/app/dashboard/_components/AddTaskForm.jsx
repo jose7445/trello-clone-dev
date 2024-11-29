@@ -1,5 +1,3 @@
-// _components/AddTaskModal.js
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const AddTaskModal = ({ isOpen, onClose, onSubmit }) => {
+const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
   const validationSchema = Yup.object({
     title: Yup.string()
       .required("Title is required")
@@ -41,18 +39,19 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit }) => {
       <DialogContent className="bg-white">
         <DialogHeader>
           <DialogTitle className="text-gray-700 text-2xl font-semibold">
-            ADD NEW TASK
+            {task ? "EDIT TASK" : "ADD NEW TASK"}
           </DialogTitle>
         </DialogHeader>
         <DialogBody>
           <Formik
             initialValues={{
-              title: "",
-              description: "",
-              state: "",
+              title: task?.title || "",
+              description: task?.description || "",
+              state: task?.state || "",
             }}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
+            enableReinitialize // Recalcula valores cuando cambia la tarea
           >
             {({
               values,
