@@ -4,10 +4,11 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import AddTask from "./_components/AddTaskForm";
 import { toast } from "react-hot-toast";
-import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componente
+import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componenteç
+import { useCurrentUser } from "@/hooks/useCurrentUser"; // Importa el hook personalizado
 
 const DashboardPage = () => {
-  const { data: session } = useSession();
+  const { userId, session } = useCurrentUser(); // Obtén el userId del hook
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null); // Nueva tarea seleccionada
   const [tasks, setTasks] = useState({
