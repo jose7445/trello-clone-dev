@@ -34,6 +34,7 @@ const DashboardPage = () => {
     try {
       // Use the GET method from the centralized api service
       const data = await api.get("/tasks");
+      console.log(data);
 
       // Filter tasks by state (or provide default empty arrays)
       const todoTasks = data.filter((task) => task.state === "todo") || [];

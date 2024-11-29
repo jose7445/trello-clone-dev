@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Task from "@/models/task"; // El modelo de tarea
 import { connectDB } from "@/libs/mongodb"; // Conexión a la base de datos
 import { getServerSession } from "next-auth"; // Importar getSession
-import { authOptions } from "../auth/[...nextauth]/route"; // Asegúrate de importar las opciones de autenticación correctamente
+import { authOptions } from "@/libs/auth-options"; // Asegúrate de importar las opciones de autenticación correctamente
 
 // Función para obtener la sesión y conectar a la base de datos
 async function getSessionAndConnectDB() {
