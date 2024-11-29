@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   MenuContent,
@@ -10,12 +11,16 @@ import { Separator } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { LuPhone } from "react-icons/lu";
 
+import { Draggable } from "react-beautiful-dnd";
+
+// Dentro del componente TaskColumns:
 const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
   const columnColors = {
     "To Do": "bg-red-200",
     "In Progress": "bg-blue-200",
     Done: "bg-green-200",
   };
+
   return (
     <div
       className={`p-4 border border-gray-300 rounded-lg ${columnColors[title]}`}
@@ -27,31 +32,44 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
         {tasks.length === 0 ? (
           <p className="text-neutral-700 font-semibold">No tasks to show</p>
         ) : (
-          tasks.map((task) => (
-            <div
-              key={task._id}
-              className="bg-white rounded-xl shadow-sm p-2 flex justify-between items-center"
-            >
-              <div>
-                <h4 className="font-semibold text-neutral-700">{task.title}</h4>
-              </div>
-              <MenuRoot>
-                <MenuTrigger asChild>
-                  <button className="bg-transparent border border-gray-300 text-sm text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
-                    Actions
-                  </button>
-                </MenuTrigger>
-                <MenuContent>
-                  <MenuItem value="edit-task" onClick={() => onEdit(task)}>
-                    Edit Task
-                  </MenuItem>
-                  <MenuItem value="delete-task" onClick={() => onDelete(task)}>
-                    Delete Task
-                  </MenuItem>
-                  <MenuItem value="mark-complete">Mark as Complete</MenuItem>
-                </MenuContent>
-              </MenuRoot>
-            </div>
+          tasks.map((task, index) => (
+            <Draggable key={task._id} draggableId={task._id} index={index}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  className="bg-white rounded-xl shadow-sm p-2 flex justify-between items-center"
+                >
+                  <div>
+                    <h4 className="font-semibold text-neutral-700">
+                      {task.title}
+                    </h4>
+                  </div>
+                  <MenuRoot>
+                    <MenuTrigger asChild>
+                      <button className="bg-transparent border border-gray-300 text-sm text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+                        Actions
+                      </button>
+                    </MenuTrigger>
+                    <MenuContent>
+                      <MenuItem value="edit-task" onClick={() => onEdit(task)}>
+                        Edit Task
+                      </MenuItem>
+                      <MenuItem
+                        value="delete-task"
+                        onClick={() => onDelete(task)}
+                      >
+                        Delete Task
+                      </MenuItem>
+                      <MenuItem value="mark-complete">
+                        Mark as Complete
+                      </MenuItem>
+                    </MenuContent>
+                  </MenuRoot>
+                </div>
+              )}
+            </Draggable>
           ))
         )}
       </div>

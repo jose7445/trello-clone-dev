@@ -7,10 +7,13 @@ import { toast } from "react-hot-toast";
 import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componenteç
 import { useCurrentUser } from "@/hooks/useCurrentUser"; // Importa el hook personalizado
 
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+// Aquí en tu componente DashboardPage:
 const DashboardPage = () => {
-  const { userId, session } = useCurrentUser(); // Obtén el userId del hook
+  const { userId, session } = useCurrentUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null); // Nueva tarea seleccionada
+  const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState({
     todo: [],
     inProgress: [],
@@ -19,28 +22,23 @@ const DashboardPage = () => {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setSelectedTask(null); // Limpia la tarea seleccionada
+    setSelectedTask(null);
   };
 
   const handleModalOpen = (task = null) => {
-    setSelectedTask(task); // Establece la tarea seleccionada (si existe)
+    setSelectedTask(task);
     setIsModalOpen(true);
   };
 
-  // Función para obtener las tareas del usuario
   const fetchTasks = async () => {
     try {
       const res = await fetch("/api/tasks");
-      if (!res.ok) {
-        toast.error("Failed to load tasks");
-        throw new Error("Failed to load tasks");
-      }
+      if (!res.ok) throw new Error("Failed to load tasks");
       const data = await res.json();
 
-      // Filtrar las tareas según su estado
-      const todoTasks = data.filter((task) => task.state === "to do") || [];
+      const todoTasks = data.filter((task) => task.state === "todo") || [];
       const inProgressTasks =
-        data.filter((task) => task.state === "in progress") || [];
+        data.filter((task) => task.state === "inProgress") || [];
       const doneTasks = data.filter((task) => task.state === "done") || [];
 
       setTasks({
@@ -55,40 +53,29 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    if (session) {
-      fetchTasks();
-    }
+    if (session) fetchTasks();
   }, [session]);
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const url = selectedTask
-        ? `/api/tasks/${selectedTask._id}` // Para edición
-        : "/api/tasks"; // Para creación
-
+        ? `/api/tasks/${selectedTask._id}`
+        : "/api/tasks";
       const ownerId = session.user.id;
-      const taskDataWithOwner = {
-        ...values,
-        owner: ownerId, // No es necesario enviar el `id`, solo los campos
-      };
-
+      const taskDataWithOwner = { ...values, owner: ownerId };
       const method = selectedTask ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskDataWithOwner),
       });
 
       if (!res.ok) throw new Error(res.statusText);
-
       toast.success(selectedTask ? "Task updated" : "Task added");
-      fetchTasks(); // Recargar tareas
+      fetchTasks();
       handleModalClose();
     } catch (error) {
-      console.error("Error saving task:", error);
       setErrors({ submit: error.message });
     } finally {
       setSubmitting(false);
@@ -97,23 +84,49 @@ const DashboardPage = () => {
 
   const handleDelete = async (task) => {
     try {
-      // Hacer la solicitud DELETE a la API
-      const res = await fetch(`/api/tasks/${task._id}`, {
-        method: "DELETE",
-      });
-
-      // Verificar si la respuesta fue correcta
+      const res = await fetch(`/api/tasks/${task._id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(res.statusText);
-
-      // Mostrar un mensaje de éxito
       toast.success("Task deleted");
-
-      // Recargar las tareas después de eliminar
       fetchTasks();
     } catch (error) {
-      console.error("Error deleting task:", error);
       toast.error("Error deleting task");
     }
+  };
+
+  // Función para manejar el cambio de tarea entre columnas
+  const handleOnDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) return;
+
+    const sourceColumn = source.droppableId;
+    const destColumn = destination.droppableId;
+
+    // Si la tarea se mueve a la misma columna, no hacer nada
+    if (sourceColumn === destColumn) return;
+
+    const sourceTasks = tasks[sourceColumn];
+    const destTasks = tasks[destColumn];
+    const taskToMove = sourceTasks.find((task) => task._id === draggableId);
+
+    // Eliminar la tarea de la columna original
+    const updatedSourceTasks = sourceTasks.filter(
+      (task) => task._id !== draggableId
+    );
+    const updatedDestTasks = [...destTasks, taskToMove];
+
+    // Actualizar el estado de las tareas
+    setTasks({
+      ...tasks,
+      [sourceColumn]: updatedSourceTasks,
+      [destColumn]: updatedDestTasks,
+    });
+
+    // Aquí puedes llamar a una API para actualizar el estado de la tarea
+    fetch(`/api/tasks/${taskToMove._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...taskToMove, state: destColumn }),
+    });
   };
 
   return (
@@ -130,35 +143,58 @@ const DashboardPage = () => {
         </Button>
       </div>
 
-      {/* Modal */}
       <AddTask
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSubmit={handleSubmit}
-        task={selectedTask} // Pasa la tarea seleccionada al formulario
+        task={selectedTask}
       />
 
-      {/* Columnas de tareas */}
-      <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <TaskColumns
-          title="To Do"
-          tasks={tasks.todo}
-          onEdit={handleModalOpen}
-          onDelete={handleDelete}
-        />
-        <TaskColumns
-          title="In Progress"
-          tasks={tasks.inProgress}
-          onEdit={handleModalOpen}
-          onDelete={handleDelete}
-        />
-        <TaskColumns
-          title="Done"
-          tasks={tasks.done}
-          onEdit={handleModalOpen}
-          onDelete={handleDelete}
-        />
-      </div>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Droppable droppableId="todo">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                <TaskColumns
+                  title="To Do"
+                  tasks={tasks.todo}
+                  onEdit={handleModalOpen}
+                  onDelete={handleDelete}
+                />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <Droppable droppableId="inProgress">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                <TaskColumns
+                  title="In Progress"
+                  tasks={tasks.inProgress}
+                  onEdit={handleModalOpen}
+                  onDelete={handleDelete}
+                />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <Droppable droppableId="done">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                <TaskColumns
+                  title="Done"
+                  tasks={tasks.done}
+                  onEdit={handleModalOpen}
+                  onDelete={handleDelete}
+                />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </div>
+      </DragDropContext>
     </div>
   );
 };

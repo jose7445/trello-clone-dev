@@ -127,8 +127,8 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
                       placeholder="Select option"
                       className="h-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     >
-                      <option value="to do">To Do</option>
-                      <option value="in progress">In Progress</option>
+                      <option value="todo">To Do</option>
+                      <option value="inProgress">In Progress</option>
                       <option value="done">Done</option>
                     </NativeSelectField>
                   </NativeSelectRoot>

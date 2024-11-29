@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-      enum: ["to do", "in progress", "done"], // Puedes ajustar las columnas según tu necesidad
+      enum: ["todo", "inProgress", "done"], // Puedes ajustar las columnas según tu necesidad
       required: true,
     },
     owner: {
