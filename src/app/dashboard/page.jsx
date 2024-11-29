@@ -6,7 +6,7 @@ import AddTask from "./_components/FormTasks";
 import { toast } from "react-hot-toast";
 import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componenteç
 import { useCurrentUser } from "@/hooks/useCurrentUser"; // Importa el hook personalizado
-
+import api from "../../services/axios"; // Import the API methods
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // Aquí en tu componente DashboardPage:
@@ -32,15 +32,16 @@ const DashboardPage = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await fetch("/api/tasks");
-      if (!res.ok) throw new Error("Failed to load tasks");
-      const data = await res.json();
+      // Use the GET method from the centralized api service
+      const data = await api.get("/tasks");
 
+      // Filter tasks by state (or provide default empty arrays)
       const todoTasks = data.filter((task) => task.state === "todo") || [];
       const inProgressTasks =
         data.filter((task) => task.state === "inProgress") || [];
       const doneTasks = data.filter((task) => task.state === "done") || [];
 
+      // Update the state with the filtered tasks
       setTasks({
         todo: todoTasks,
         inProgress: inProgressTasks,
@@ -48,7 +49,7 @@ const DashboardPage = () => {
       });
     } catch (error) {
       console.error("Error fetching tasks:", error);
-      toast.error("Error fetching tasks");
+      toast.error("Error fetching tasks"); // Show error toast if something goes wrong
     }
   };
 
@@ -59,25 +60,28 @@ const DashboardPage = () => {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const url = selectedTask
-        ? `/api/tasks/${selectedTask._id}`
-        : "/api/tasks";
+        ? `/tasks/${selectedTask._id}` // PUT if task is selected
+        : "/tasks"; // POST if no task is selected
+
       const ownerId = session.user.id;
       const taskDataWithOwner = { ...values, owner: ownerId };
-      const method = selectedTask ? "PUT" : "POST";
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(taskDataWithOwner),
-      });
+      const method = selectedTask ? "put" : "post"; // Use 'put' or 'post' based on the presence of selectedTask
 
-      if (!res.ok) throw new Error(res.statusText);
+      // Make the API call using the centralized API methods (POST or PUT)
+      const res = await api[method](url, taskDataWithOwner);
+
       toast.success(selectedTask ? "Task updated" : "Task added");
-      fetchTasks();
-      handleModalClose();
+
+      fetchTasks(); // Refresh tasks list
+      handleModalClose(); // Close modal after submission
     } catch (error) {
+      // Handle any errors by setting error state
       setErrors({ submit: error.message });
+      toast.error("Error submitting task");
+      console.error(error); // Log error for debugging
     } finally {
+      // Set submitting state to false after the API call
       setSubmitting(false);
     }
   };
@@ -94,7 +98,7 @@ const DashboardPage = () => {
   };
 
   // Función para manejar el cambio de tarea entre columnas
-  const handleOnDragEnd = (result) => {
+  const handleOnDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
 
@@ -121,12 +125,18 @@ const DashboardPage = () => {
       [destColumn]: updatedDestTasks,
     });
 
-    // Aquí puedes llamar a una API para actualizar el estado de la tarea
-    fetch(`/api/tasks/${taskToMove._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...taskToMove, state: destColumn }),
-    });
+    try {
+      // Usar el método PUT del API centralizado para mover la tarea
+      await api.put(`/tasks/${taskToMove._id}`, {
+        ...taskToMove,
+        state: destColumn,
+      });
+
+      toast.success("Task moved successfully");
+    } catch (error) {
+      toast.error("Error moving task");
+      console.error(error); // Log error for debugging
+    }
   };
 
   return (
