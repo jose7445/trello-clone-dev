@@ -32,7 +32,11 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
   });
 
   return (
-    <DialogRoot open={isOpen} onOpenChange={onClose}>
+    <DialogRoot
+      open={isOpen}
+      onOpenChange={onClose}
+      initialFocusEl={() => ref.current}
+    >
       <DialogTrigger asChild>
         <Button>Add Task</Button>
       </DialogTrigger>
