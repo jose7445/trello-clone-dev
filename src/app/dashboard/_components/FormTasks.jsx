@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@chakra-ui/react";
-import { Textarea } from "@chakra-ui/react";
+import { Stack, Textarea } from "@chakra-ui/react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -95,10 +95,12 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
                   >
                     Description
                   </label>
+
                   <Textarea
                     id="description"
                     name="description"
                     value={values.description}
+                    size="xl"
                     onChange={handleChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   />

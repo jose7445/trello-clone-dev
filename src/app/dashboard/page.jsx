@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import AddTask from "./_components/AddTaskForm";
+import AddTask from "./_components/FormTasks";
 import { toast } from "react-hot-toast";
 import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componenteç
 import { useCurrentUser } from "@/hooks/useCurrentUser"; // Importa el hook personalizado
@@ -119,7 +119,7 @@ const DashboardPage = () => {
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-4">
-        <h1 className="text-2xl md:text-4xl text-left text-neutral-800 font-bold">
+        <h1 className="text-2xl md:text-4xl text-left text-neutral-700 font-bold">
           Board 1
         </h1>
         <Button
