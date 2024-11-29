@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/menu";
 import AddTaskForm from "./AddTaskForm"; // Asegúrate de que el componente AddTaskModal esté correctamente importado.
 
-const TaskColumns = ({ title, tasks, onEdit }) => {
+const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
   return (
     <div className="bg-slate-100 p-4 border border-gray-300 rounded-lg">
       <h3 className="text-lg font-medium text-neutral-700">{title}</h3>
@@ -33,7 +33,9 @@ const TaskColumns = ({ title, tasks, onEdit }) => {
                   <MenuItem value="edit-task" onClick={() => onEdit(task)}>
                     Edit Task
                   </MenuItem>
-                  <MenuItem value="delete-task">Delete Task</MenuItem>
+                  <MenuItem value="delete-task" onClick={() => onDelete(task)}>
+                    Delete Task
+                  </MenuItem>
                   <MenuItem value="mark-complete">Mark as Complete</MenuItem>
                 </MenuContent>
               </MenuRoot>

@@ -94,6 +94,27 @@ const DashboardPage = () => {
     }
   };
 
+  const handleDelete = async (task) => {
+    try {
+      // Hacer la solicitud DELETE a la API
+      const res = await fetch(`/api/tasks/${task._id}`, {
+        method: "DELETE",
+      });
+
+      // Verificar si la respuesta fue correcta
+      if (!res.ok) throw new Error(res.statusText);
+
+      // Mostrar un mensaje de éxito
+      toast.success("Task deleted");
+
+      // Recargar las tareas después de eliminar
+      fetchTasks();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      toast.error("Error deleting task");
+    }
+  };
+
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-4">
@@ -122,13 +143,20 @@ const DashboardPage = () => {
           title="To Do"
           tasks={tasks.todo}
           onEdit={handleModalOpen}
+          onDelete={handleDelete}
         />
         <TaskColumns
           title="In Progress"
           tasks={tasks.inProgress}
           onEdit={handleModalOpen}
+          onDelete={handleDelete}
         />
-        <TaskColumns title="Done" tasks={tasks.done} onEdit={handleModalOpen} />
+        <TaskColumns
+          title="Done"
+          tasks={tasks.done}
+          onEdit={handleModalOpen}
+          onDelete={handleDelete}
+        />
       </div>
     </div>
   );

@@ -58,3 +58,42 @@ export async function PUT(request, { params }) {
     );
   }
 }
+
+export async function DELETE(request, { params }) {
+  try {
+    // Extraer el ID de la tarea desde los parámetros de la URL
+    const { taskId } = await params;
+
+    await connectDB(); // Conectar a la base de datos
+
+    const session = await getServerSession(authOptions); // Obtener la sesión del usuario
+
+    if (!session) {
+      return NextResponse.json(
+        { message: "No session found" },
+        { status: 401 }
+      );
+    }
+
+    // Buscar la tarea por ID
+    const task = await Task.findOne({ _id: taskId });
+
+    if (!task) {
+      return NextResponse.json({ message: "Task not found" }, { status: 404 });
+    }
+
+    // Eliminar la tarea
+    await Task.findOneAndDelete({ _id: taskId });
+
+    return NextResponse.json(
+      { message: "Task deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "An unexpected error occurred" },
+      { status: 500 }
+    );
+  }
+}
