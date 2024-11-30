@@ -20,7 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
+const FormTasks = ({ isOpen, onClose, onSubmit, task }) => {
   const validationSchema = Yup.object({
     title: Yup.string()
       .required("Title is required")
@@ -37,9 +37,7 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
       onOpenChange={onClose}
       initialFocusEl={() => ref.current}
     >
-      <DialogTrigger asChild>
-        <Button>Add Task</Button>
-      </DialogTrigger>
+      <DialogTrigger></DialogTrigger>
       <DialogContent className="bg-white">
         <DialogHeader>
           <DialogTitle className="text-gray-700 text-2xl font-semibold">
@@ -160,4 +158,4 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
   );
 };
 
-export default AddTaskModal;
+export default FormTasks;

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import AddTask from "./_components/FormTasks";
+import FormTasks from "./_components/FormTasks";
 import { toast } from "react-hot-toast";
 import TaskColumns from "./_components/TaskColumns";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -95,10 +95,10 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <div className="flex items-center gap-4 mt-4">
-        <h1 className="text-2xl md:text-4xl text-left text-neutral-700 font-bold">
-          Board 1
+    <div className="">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl md:text-4xl text-left text-neutral-900 font-bold">
+          My Board
         </h1>
         <Button
           className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-2 rounded"
@@ -108,14 +108,14 @@ const DashboardPage = () => {
         </Button>
       </div>
 
-      <AddTask
+      <FormTasks
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSubmit={handleSubmit}
         task={selectedTask}
       />
 
-      <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="container mx-auto w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
         {["todo", "inProgress", "done"].map((state) => (
           <div key={state}>
             <TaskColumns

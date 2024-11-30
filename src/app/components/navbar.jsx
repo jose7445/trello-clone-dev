@@ -15,7 +15,7 @@ export default function NavBar() {
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
-      <div className="container mx-auto flex flex-wrap items-center justify-between py-4">
+      <div className=" flex flex-wrap items-center justify-between p-4">
         <Link
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"

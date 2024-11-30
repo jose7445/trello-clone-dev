@@ -19,7 +19,7 @@ const barlow = Barlow({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${barlow.className} antialiased h-screen bg-slate-100`}>
+      <body className={`${barlow.className} antialiased bg-slate-100`}>
         <Provider>
           <Providers>
             <NavBar />
