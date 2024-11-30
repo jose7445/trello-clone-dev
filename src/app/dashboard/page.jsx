@@ -162,7 +162,12 @@ const DashboardPage = () => {
 
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Droppable droppableId="todo">
+          <Droppable
+            droppableId="todo"
+            isDropDisabled={false}
+            isCombineEnabled={false}
+            ignoreContainerClipping={false}
+          >
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <TaskColumns
@@ -176,7 +181,12 @@ const DashboardPage = () => {
             )}
           </Droppable>
 
-          <Droppable droppableId="inProgress">
+          <Droppable
+            droppableId="inProgress"
+            isDropDisabled={false}
+            isCombineEnabled={false}
+            ignoreContainerClipping={false}
+          >
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <TaskColumns
@@ -190,7 +200,12 @@ const DashboardPage = () => {
             )}
           </Droppable>
 
-          <Droppable droppableId="done">
+          <Droppable
+            droppableId="done"
+            isDropDisabled={false}
+            isCombineEnabled={false}
+            ignoreContainerClipping={false}
+          >
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <TaskColumns
