@@ -6,14 +6,10 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import AddTaskForm from "./FormTasks"; // Asegúrate de que el componente AddTaskModal esté correctamente importado.
-import { Separator } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { LuPhone } from "react-icons/lu";
-
+import AddTaskForm from "./FormTasks";
+import { IconButton, Separator } from "@chakra-ui/react";
 import { Draggable } from "react-beautiful-dnd";
 
-// Dentro del componente TaskColumns:
 const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
   const columnColors = {
     "To Do": "bg-red-200",

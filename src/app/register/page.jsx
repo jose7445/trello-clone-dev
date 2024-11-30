@@ -16,7 +16,6 @@ import { toast } from "react-hot-toast";
 function RegisterPage() {
   const router = useRouter();
 
-  // Validación con Yup
   const validationSchema = Yup.object({
     fullname: Yup.string()
       .required("Full name is required")
@@ -34,14 +33,12 @@ function RegisterPage() {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      // Realiza la solicitud de registro
       const signupResponse = await axios.post("/api/auth/signup", {
         fullname: values.fullname,
         email: values.email,
         password: values.password,
       });
 
-      // Intenta iniciar sesión con las credenciales recién registradas
       const res = await signIn("credentials", {
         email: signupResponse.data.email,
         password: values.password,
@@ -49,7 +46,7 @@ function RegisterPage() {
       });
 
       if (!res?.ok) {
-        toast.error(res.error || "Invalid register"); // Muestra un toast de error
+        toast.error(res.error || "Invalid register");
         throw new Error(res.error || "Invalid register");
       } else {
         //toast
@@ -64,7 +61,7 @@ function RegisterPage() {
         ? error.response.data.message
         : "An unexpected error occurred";
       //toast
-      toast.error(errorMessage || "Invalid register"); // Muestra un toast de error
+      toast.error(errorMessage || "Invalid register");
     } finally {
       setSubmitting(false);
     }

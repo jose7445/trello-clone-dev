@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import "./globals.css";
 
 export default function Home() {
   const { data: session, status } = useSession();

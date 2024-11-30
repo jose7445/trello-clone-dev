@@ -55,7 +55,7 @@ const AddTaskModal = ({ isOpen, onClose, onSubmit, task }) => {
             }}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
-            enableReinitialize // Recalcula valores cuando cambia la tarea
+            enableReinitialize
           >
             {({
               values,

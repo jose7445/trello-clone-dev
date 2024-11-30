@@ -13,17 +13,17 @@ const taskSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-      enum: ["todo", "inProgress", "done"], // Puedes ajustar las columnas según tu necesidad
+      enum: ["todo", "inProgress", "done"],
       required: true,
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId, // Referencia a otro documento en la base de datos
-      ref: "User", // Relación con el modelo de usuario
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
   },
   {
-    timestamps: true, // Añade createdAt y updatedAt automáticamente
+    timestamps: true,
   }
 );
 

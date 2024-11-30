@@ -1,9 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/models/user";
-import { connectDB } from "@/libs/mongodb"; // Asegúrate de que el path es correcto
+import { connectDB } from "@/libs/mongodb";
 
-// Mensajes de error centralizados
 const ERROR_INVALID_CREDENTIALS = "Invalid credentials";
 
 // Configuración de NextAuth

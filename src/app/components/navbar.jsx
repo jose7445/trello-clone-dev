@@ -4,12 +4,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { useCurrentUser } from "@/hooks/useCurrentUser"; // Import the custom hook
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
-export default function ButtonAppBar() {
-  const { userId, fullname, session, status } = useCurrentUser(); // Use custom hook
+export default function NavBar() {
+  const { userId, fullname, session, status } = useCurrentUser();
 
-  // State to handle mobile menu toggle
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);

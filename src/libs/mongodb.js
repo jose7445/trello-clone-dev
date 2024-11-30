@@ -8,7 +8,7 @@ export const connectDB = async () => {
   }
 
   try {
-    mongoose.set("strictQuery", false); // Para evitar advertencias sobre "strictQuery"
+    mongoose.set("strictQuery", false); 
     const { connection } = await mongoose.connect(MONGODB_URI);
 
     if (connection.readyState === 1) {

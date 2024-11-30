@@ -25,11 +25,8 @@ const LoginForm = () => {
       .required("Password is required"),
   });
 
-  // onSubmit function extracted
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      // Start the loading state as soon as submit is clicked
-
       const { email, password } = values;
 
       const res = await signIn("credentials", {
@@ -39,7 +36,7 @@ const LoginForm = () => {
       });
 
       if (!res.ok) {
-        toast.error(res.error || "Invalid Credentials"); // Muestra un toast de error
+        toast.error(res.error || "Invalid Credentials");
         throw new Error(res.error || "Invalid Credentials");
       } else {
         console.log(res);
@@ -48,7 +45,6 @@ const LoginForm = () => {
           router.push("/dashboard");
         }, 2000);
 
-        // Stop loading if login is successful
         setLoading(false);
       }
     } catch (error) {

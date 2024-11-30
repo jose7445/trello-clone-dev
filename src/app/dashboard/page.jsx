@@ -4,12 +4,12 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import AddTask from "./_components/FormTasks";
 import { toast } from "react-hot-toast";
-import TaskColumns from "./_components/TaskColumns"; // Importa el nuevo componenteç
-import { useCurrentUser } from "@/hooks/useCurrentUser"; // Importa el hook personalizado
-import api from "../../services/axios"; // Import the API methods
+import TaskColumns from "./_components/TaskColumns";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import api from "../../services/axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-// Aquí en tu componente DashboardPage:
+// Aquí en tu componente DashoardPage:
 const DashboardPage = () => {
   const { userId, session } = useCurrentUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,16 +32,13 @@ const DashboardPage = () => {
 
   const getTasks = async () => {
     try {
-      // Use the GET method from the centralized api service
       const data = await api.get("/tasks");
 
-      // Filter tasks by state (or provide default empty arrays)
       const todoTasks = data.filter((task) => task.state === "todo") || [];
       const inProgressTasks =
         data.filter((task) => task.state === "inProgress") || [];
       const doneTasks = data.filter((task) => task.state === "done") || [];
 
-      // Update the state with the filtered tasks
       setTasks({
         todo: todoTasks,
         inProgress: inProgressTasks,
@@ -49,7 +46,7 @@ const DashboardPage = () => {
       });
     } catch (error) {
       console.error("Error fetching tasks:", error);
-      toast.error("Error fetching tasks"); // Show error toast if something goes wrong
+      toast.error("Error fetching tasks");
     }
   };
 
@@ -59,29 +56,24 @@ const DashboardPage = () => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      const url = selectedTask
-        ? `/tasks/${selectedTask._id}` // PUT if task is selected
-        : "/tasks"; // POST if no task is selected
+      const url = selectedTask ? `/tasks/${selectedTask._id}` : "/tasks";
 
       const ownerId = session.user.id;
       const taskDataWithOwner = { ...values, owner: ownerId };
 
-      const method = selectedTask ? "put" : "post"; // Use 'put' or 'post' based on the presence of selectedTask
+      const method = selectedTask ? "put" : "post";
 
-      // Make the API call using the centralized API methods (POST or PUT)
       const res = await api[method](url, taskDataWithOwner);
 
       toast.success(selectedTask ? "Task updated" : "Task added");
 
-      getTasks(); // Refresh tasks list
-      handleModalClose(); // Close modal after submission
+      getTasks();
+      handleModalClose();
     } catch (error) {
-      // Handle any errors by setting error state
       setErrors({ submit: error.message });
       toast.error("Error submitting task");
-      console.error(error); // Log error for debugging
+      console.error(error);
     } finally {
-      // Set submitting state to false after the API call
       setSubmitting(false);
     }
   };
@@ -97,7 +89,6 @@ const DashboardPage = () => {
     }
   };
 
-  // Función para manejar el cambio de tarea entre columnas
   const handleOnDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
@@ -105,7 +96,6 @@ const DashboardPage = () => {
     const sourceColumn = source.droppableId;
     const destColumn = destination.droppableId;
 
-    // Si la tarea se mueve a la misma columna, no hacer nada
     if (sourceColumn === destColumn) return;
 
     const sourceTasks = tasks[sourceColumn];
@@ -126,7 +116,6 @@ const DashboardPage = () => {
     });
 
     try {
-      // Usar el método PUT del API centralizado para mover la tarea
       await api.put(`/tasks/${taskToMove._id}`, {
         ...taskToMove,
         state: destColumn,
@@ -135,7 +124,7 @@ const DashboardPage = () => {
       toast.success("Task moved successfully");
     } catch (error) {
       toast.error("Error moving task");
-      console.error(error); // Log error for debugging
+      console.error(error);
     }
   };
 

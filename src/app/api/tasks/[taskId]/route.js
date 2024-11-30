@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import Task from "@/models/task"; // El modelo de tarea
-import { connectDB } from "@/libs/mongodb"; // Conexión a la base de datos
-import { getServerSession } from "next-auth"; // Importar getSession
-import { authOptions } from "@/libs/auth-options"; // Asegúrate de importar las opciones de autenticación correctamente
+import Task from "@/models/task";
+import { connectDB } from "@/libs/mongodb";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/auth-options";
 
-// Función para obtener la sesión y verificarla
 async function getSessionAndConnectDB() {
   await connectDB();
   const session = await getServerSession(authOptions);
@@ -14,7 +13,6 @@ async function getSessionAndConnectDB() {
   return session;
 }
 
-// Función para manejar la validación de la tarea
 async function findTaskById(taskId) {
   const task = await Task.findOne({ _id: taskId });
   if (!task) {
@@ -23,17 +21,15 @@ async function findTaskById(taskId) {
   return task;
 }
 
-// PUT: Actualizar una tarea específica por ID
 export async function PUT(request, { params }) {
   try {
     // Espera para acceder a params
-    const { taskId } = await params; // Asegúrate de usar await aquí
+    const { taskId } = await params;
 
-    await getSessionAndConnectDB(); // Conectar a DB y verificar sesión
+    await getSessionAndConnectDB();
 
     const { title, description, state } = await request.json();
 
-    // Verificar que al menos uno de los campos de la tarea se haya enviado
     if (!title && !description && !state) {
       return NextResponse.json(
         { message: "No fields to update" },
@@ -41,7 +37,6 @@ export async function PUT(request, { params }) {
       );
     }
 
-    // Buscar la tarea y actualizarla
     const updatedTask = await Task.findOneAndUpdate(
       { _id: taskId },
       { title, description, state },
@@ -61,16 +56,13 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE: Eliminar una tarea específica por ID
 export async function DELETE(request, { params }) {
   try {
-    // Espera para acceder a params
-    const { taskId } = await params; // Asegúrate de usar await aquí
+    const { taskId } = await params;
 
-    await getSessionAndConnectDB(); // Conectar a DB y verificar sesión
+    await getSessionAndConnectDB();
 
-    // Buscar y eliminar la tarea
-    await findTaskById(taskId); // Lanzará error si no se encuentra la tarea
+    await findTaskById(taskId);
 
     await Task.findOneAndDelete({ _id: taskId });
 

@@ -1,6 +1,5 @@
 import { Schema, model, models } from "mongoose";
 
-// Definición del esquema de usuario
 const userSchema = new Schema(
   {
     email: {
@@ -9,13 +8,13 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       match: [
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        "El correo electrónico no es válido",
+        "Invalid email",
       ],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      select: false, // Esto evita que la contraseña se retorne en las respuestas de la API
+      select: false,
       minlength: [6, "Password must be at least 6 characters"],
     },
     fullname: {
@@ -25,11 +24,10 @@ const userSchema = new Schema(
     },
   },
   {
-    timestamps: true, // Añade las fechas de creación y actualización automáticamente
+    timestamps: true,
   }
 );
 
-// Crear el modelo de usuario si no existe
 const User = models.User || model("User", userSchema);
 
 export default User;
