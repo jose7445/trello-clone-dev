@@ -19,14 +19,14 @@ export default function Home() {
 
           <div>
             <Image
-              src="/logo.webp"
-              alt="Picture of the author"
+              src="/logo_camaleonicanalytics.webp"
+              alt="Logo Camaleonic Analytics"
               width={200}
               height={200}
             />
           </div>
         </div>
-        <div className="text-3xl md:text-6xl text-center bg-gradient-to-r from-fuchsia-600 to-pink-600 text-white px-4 p-2 rounded-md pb-4 w-fit my-6">
+        <div className="text-3xl md:text-6xl text-center bg-gradient-to-r from-[#11253e] to-[#1e3a5f] text-white px-6 py-4 rounded-lg shadow-lg w-fit mx-auto mb-4">
           work forward
         </div>
       </div>

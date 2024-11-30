@@ -16,6 +16,7 @@ export default function ButtonAppBar() {
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
+          <Image src="/logo_web.webp" alt="Logo Web" width={50} height={50} />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             PLANIFY
           </span>
