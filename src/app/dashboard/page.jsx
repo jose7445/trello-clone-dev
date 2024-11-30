@@ -7,7 +7,6 @@ import { toast } from "react-hot-toast";
 import TaskColumns from "./_components/TaskColumns";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import api from "../../services/axios";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // Aquí en tu componente DashoardPage:
 const DashboardPage = () => {
@@ -28,6 +27,12 @@ const DashboardPage = () => {
   const handleModalOpen = (task = null) => {
     setSelectedTask(task);
     setIsModalOpen(true);
+  };
+
+  const stateTitles = {
+    todo: "To Do",
+    inProgress: "In Progress",
+    done: "Done",
   };
 
   const getTasks = async () => {
@@ -89,45 +94,6 @@ const DashboardPage = () => {
     }
   };
 
-  const handleOnDragEnd = async (result) => {
-    const { destination, source, draggableId } = result;
-    if (!destination) return;
-
-    const sourceColumn = source.droppableId;
-    const destColumn = destination.droppableId;
-
-    if (sourceColumn === destColumn) return;
-
-    const sourceTasks = tasks[sourceColumn];
-    const destTasks = tasks[destColumn];
-    const taskToMove = sourceTasks.find((task) => task._id === draggableId);
-
-    // Eliminar la tarea de la columna original
-    const updatedSourceTasks = sourceTasks.filter(
-      (task) => task._id !== draggableId
-    );
-    const updatedDestTasks = [...destTasks, taskToMove];
-
-    // Actualizar el estado de las tareas
-    setTasks({
-      ...tasks,
-      [sourceColumn]: updatedSourceTasks,
-      [destColumn]: updatedDestTasks,
-    });
-
-    try {
-      await api.put(`/tasks/${taskToMove._id}`, {
-        ...taskToMove,
-        state: destColumn,
-      });
-
-      toast.success("Task moved successfully");
-    } catch (error) {
-      toast.error("Error moving task");
-      console.error(error);
-    }
-  };
-
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-4 mt-4">
@@ -149,66 +115,18 @@ const DashboardPage = () => {
         task={selectedTask}
       />
 
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Droppable
-            droppableId="todo"
-            isDropDisabled={false}
-            isCombineEnabled={false}
-            ignoreContainerClipping={false}
-          >
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <TaskColumns
-                  title="To Do"
-                  tasks={tasks.todo}
-                  onEdit={handleModalOpen}
-                  onDelete={deleteTasks}
-                />
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-          <Droppable
-            droppableId="inProgress"
-            isDropDisabled={false}
-            isCombineEnabled={false}
-            ignoreContainerClipping={false}
-          >
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <TaskColumns
-                  title="In Progress"
-                  tasks={tasks.inProgress}
-                  onEdit={handleModalOpen}
-                  onDelete={deleteTasks}
-                />
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-          <Droppable
-            droppableId="done"
-            isDropDisabled={false}
-            isCombineEnabled={false}
-            ignoreContainerClipping={false}
-          >
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <TaskColumns
-                  title="Done"
-                  tasks={tasks.done}
-                  onEdit={handleModalOpen}
-                  onDelete={deleteTasks}
-                />
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-      </DragDropContext>
+      <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {["todo", "inProgress", "done"].map((state) => (
+          <div key={state}>
+            <TaskColumns
+              title={stateTitles[state]}
+              tasks={tasks[state]}
+              onEdit={handleModalOpen}
+              onDelete={deleteTasks}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
