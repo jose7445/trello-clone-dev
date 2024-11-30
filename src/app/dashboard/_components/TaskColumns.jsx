@@ -11,9 +11,9 @@ import { IconButton, Separator } from "@chakra-ui/react";
 
 const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
   const columnColors = {
-    "To Do": "bg-red-200",
-    "In Progress": "bg-blue-200",
-    Done: "bg-green-200",
+    "To Do": "bg-red-100",
+    "In Progress": "bg-blue-100",
+    Done: "bg-green-100",
   };
 
   return (
