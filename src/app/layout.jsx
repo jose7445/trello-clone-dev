@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
           <Providers>
             <NavBar />
             <Toaster position="bottom-center" reverseOrder={false} />
-            <main className="pt-10 pb-20 bg-slate-100">{children}</main>
+            <main className="bg-slate-100">{children}</main>
           </Providers>
         </Provider>
       </body>

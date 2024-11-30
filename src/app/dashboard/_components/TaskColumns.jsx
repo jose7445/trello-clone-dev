@@ -62,9 +62,6 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
                       >
                         Delete Task
                       </MenuItem>
-                      <MenuItem value="mark-complete">
-                        Mark as Complete
-                      </MenuItem>
                     </MenuContent>
                   </MenuRoot>
                 </div>

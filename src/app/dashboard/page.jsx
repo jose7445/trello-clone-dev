@@ -30,11 +30,10 @@ const DashboardPage = () => {
     setIsModalOpen(true);
   };
 
-  const fetchTasks = async () => {
+  const getTasks = async () => {
     try {
       // Use the GET method from the centralized api service
       const data = await api.get("/tasks");
-      console.log(data);
 
       // Filter tasks by state (or provide default empty arrays)
       const todoTasks = data.filter((task) => task.state === "todo") || [];
@@ -55,7 +54,7 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    if (session) fetchTasks();
+    if (session) getTasks();
   }, [session]);
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
@@ -74,7 +73,7 @@ const DashboardPage = () => {
 
       toast.success(selectedTask ? "Task updated" : "Task added");
 
-      fetchTasks(); // Refresh tasks list
+      getTasks(); // Refresh tasks list
       handleModalClose(); // Close modal after submission
     } catch (error) {
       // Handle any errors by setting error state
@@ -87,12 +86,12 @@ const DashboardPage = () => {
     }
   };
 
-  const handleDelete = async (task) => {
+  const deleteTasks = async (task) => {
     try {
       const res = await fetch(`/api/tasks/${task._id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(res.statusText);
       toast.success("Task deleted");
-      fetchTasks();
+      getTasks();
     } catch (error) {
       toast.error("Error deleting task");
     }
@@ -142,12 +141,12 @@ const DashboardPage = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-4">
         <h1 className="text-2xl md:text-4xl text-left text-neutral-700 font-bold">
           Board 1
         </h1>
         <Button
-          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-2 rounded"
           onClick={() => handleModalOpen()}
         >
           ADD TASK
@@ -170,7 +169,7 @@ const DashboardPage = () => {
                   title="To Do"
                   tasks={tasks.todo}
                   onEdit={handleModalOpen}
-                  onDelete={handleDelete}
+                  onDelete={deleteTasks}
                 />
                 {provided.placeholder}
               </div>
@@ -184,7 +183,7 @@ const DashboardPage = () => {
                   title="In Progress"
                   tasks={tasks.inProgress}
                   onEdit={handleModalOpen}
-                  onDelete={handleDelete}
+                  onDelete={deleteTasks}
                 />
                 {provided.placeholder}
               </div>
@@ -198,7 +197,7 @@ const DashboardPage = () => {
                   title="Done"
                   tasks={tasks.done}
                   onEdit={handleModalOpen}
-                  onDelete={handleDelete}
+                  onDelete={deleteTasks}
                 />
                 {provided.placeholder}
               </div>
