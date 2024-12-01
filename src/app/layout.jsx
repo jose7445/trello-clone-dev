@@ -1,5 +1,5 @@
 import "./globals.css";
-import Providers from "./utils/providers";
+import Providers from "./utils/Providers";
 import { Provider } from "@/components/ui/provider";
 import { Barlow } from "next/font/google";
 import NavBar from "./components/nav-bar";

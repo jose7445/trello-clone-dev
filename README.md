@@ -24,11 +24,11 @@ Trello Clone is a web application built with Next.js that emulates the basic fun
    npm install
    ```
 
-## Getting Started
+3. Getting started:
 
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
 
 ## Dependencies
 
@@ -54,4 +54,11 @@ The following tasks could not be completed due to lack of time. However, they ar
 - **Implement role-based access control**: Admins can manage all tasks, while regular users can only manage their own tasks (You can use libraries like NextAuth).
 - **Sort and filter tasks**: A page that displays tables that show the list of tasks something like Trello. The user should be able to modify and delete.
 - **Create data table**: The table should have some functionality such as sorting and filters.
-- **Unit tests**: Write tests fo backend and frontend
+- **Unit tests**: Write tests fo backend and frontend.
+- **Drag and Drop**: Use drag and drop to move the tasks.
+
+## Hosting
+
+You can access the project through the following URL:
+
+[www.google.es](http://www.google.es)
