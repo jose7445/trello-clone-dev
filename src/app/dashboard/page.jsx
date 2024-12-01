@@ -61,6 +61,7 @@ const DashboardPage = () => {
   }, [session]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true);
     try {
       const url = selectedTask ? `/tasks/${selectedTask._id}` : "/tasks";
 
@@ -74,8 +75,10 @@ const DashboardPage = () => {
       let newTask;
       if (method === "post") {
         newTask = { ...taskDataWithOwner, _id: res._id };
+        toast.success("Task created successfully");
       } else {
         newTask = res.task;
+        toast.success("Task updated successfully");
       }
 
       if (!selectedTask) {
