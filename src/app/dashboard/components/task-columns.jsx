@@ -23,9 +23,9 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
       className={`p-4 border border-gray-300 rounded-lg ${columnColors[title]}`}
     >
       <h3 className="text-lg font-semibold text-neutral-700">{title}</h3>
-      <Separator variant="solid" className="border border-gray-500 mt-2" />
+      <Separator variant="solid" className="border border-gray-400 my-2" />
 
-      <div className="mt-3 space-y-2">
+      <div className=" space-y-2">
         {tasks.length === 0 ? (
           <div className="text-neutral-700 font-semibold">No tasks to show</div>
         ) : (
@@ -34,9 +34,10 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
               key={task._id}
               className="bg-white rounded-xl shadow-sm p-2 flex justify-between items-center"
             >
-              <div>
-                <h4 className="font-semibold text-neutral-700">{task.title}</h4>
-              </div>
+              <h4 className="text-md font-semibold text-neutral-700 truncate max-w-auto">
+                {task.title}
+              </h4>
+
               <MenuRoot>
                 <MenuTrigger asChild>
                   <IconButton aria-label="Search database">
