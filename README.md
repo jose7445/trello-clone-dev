@@ -66,4 +66,3 @@ You can access the project through the following URL:
 ## Issues
 
 - I would like to use PrimeReact but it has been very difficult to combine it with Tailwind. PrimeReact styles did not display correctly with Tailwind.
-- In the local project, Next.js tells me that I have a hydration problem, but I have not been able to find out where it comes from. The issue is: **"hydration failed because the server rendered html didn't match the client. as a result this tree will be regenerated on the client. this can happen if a ssr-ed client component used"**.
