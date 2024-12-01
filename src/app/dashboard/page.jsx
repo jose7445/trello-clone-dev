@@ -60,7 +60,7 @@ const DashboardPage = () => {
     if (session) getTasks();
   }, [session]);
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const url = selectedTask ? `/tasks/${selectedTask._id}` : "/tasks";
 
@@ -76,7 +76,6 @@ const DashboardPage = () => {
       getTasks();
       handleModalClose();
     } catch (error) {
-      setErrors({ submit: error.message });
       toast.error("Error submitting task");
       console.error(error);
     } finally {
@@ -88,9 +87,16 @@ const DashboardPage = () => {
     try {
       const res = await fetch(`/api/tasks/${task._id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(res.statusText);
+
+      // Eliminar la tarea del estado sin volver a cargar todo
+      setTasks((prevTasks) => ({
+        ...prevTasks,
+        [task.state]: prevTasks[task.state].filter((t) => t._id !== task._id),
+      }));
+
       toast.success("Task deleted");
-      getTasks();
     } catch (error) {
+      console.error("Error deleting task", error);
       toast.error("Error deleting task");
     }
   };

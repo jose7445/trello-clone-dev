@@ -128,7 +128,7 @@ const FormTasks = ({ isOpen, onClose, onSubmit, task }) => {
                   </NativeSelectRoot>
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="p-0">
                   <DialogActionTrigger asChild>
                     <Button
                       className="text-primary text-center py-2 px-4 font-medium rounded-lg hover:bg-teal-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
