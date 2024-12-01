@@ -126,6 +126,11 @@ const FormTasks = ({ isOpen, onClose, onSubmit, task }) => {
                       <option value="done">Done</option>
                     </NativeSelectField>
                   </NativeSelectRoot>
+                  {errors.state && touched.state && (
+                    <div className="text-red-700 text-xs font-semibold mt-1">
+                      {errors.state}
+                    </div>
+                  )}
                 </div>
 
                 <DialogFooter className="p-0">
