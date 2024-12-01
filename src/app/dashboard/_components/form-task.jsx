@@ -32,11 +32,7 @@ const FormTasks = ({ isOpen, onClose, onSubmit, task }) => {
   });
 
   return (
-    <DialogRoot
-      open={isOpen}
-      onOpenChange={onClose}
-      initialFocusEl={() => ref.current}
-    >
+    <DialogRoot open={isOpen} onOpenChange={onClose}>
       <DialogTrigger></DialogTrigger>
       <DialogContent className="bg-white">
         <DialogHeader>
