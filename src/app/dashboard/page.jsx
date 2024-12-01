@@ -76,35 +76,31 @@ const DashboardPage = () => {
 
       const method = selectedTask ? "put" : "post";
 
-      const res = await api[method](url, taskDataWithOwner);
-
-      let newTask;
-      if (method === "post") {
-        newTask = { ...taskDataWithOwner, _id: res._id };
-        toast.success("Task created successfully");
-      } else {
-        newTask = res.task;
-        toast.success("Task updated successfully");
-      }
+      const updatedTask = { ...selectedTask, ...taskDataWithOwner };
 
       setTasks((prevTasks) => {
         const updatedTasks = { ...prevTasks };
 
-        if (!selectedTask) {
-          updatedTasks[newTask.state] = [
-            ...updatedTasks[newTask.state],
-            newTask,
-          ];
-        } else {
-          updatedTasks[newTask.state] = updatedTasks[newTask.state].map(
-            (task) =>
-              task._id === newTask._id ? { ...task, ...newTask } : task
-          );
-        }
+        updatedTasks[selectedTask.state] = updatedTasks[
+          selectedTask.state
+        ].filter((task) => task._id !== updatedTask._id);
+
+        updatedTasks[updatedTask.state] = [
+          ...(updatedTasks[updatedTask.state] || []),
+          updatedTask,
+        ];
 
         return updatedTasks;
       });
-      getTasks();
+
+      const res = await api[method](url, taskDataWithOwner);
+
+      if (method === "post") {
+        toast.success("Task created successfully");
+      } else {
+        toast.success("Task updated successfully");
+      }
+
       handleModalClose();
     } catch (error) {
       toast.error("Error submitting task");
