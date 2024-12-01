@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import FormTasks from "./_components/form-task";
+import FormTasks from "./components/form-task";
 import { toast } from "react-hot-toast";
-import TaskColumns from "./_components/task-columns";
+import TaskColumns from "./components/task-columns";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import api from "../../services/axios";
 import { FiPlus } from "react-icons/fi"; // Ícono de suma
