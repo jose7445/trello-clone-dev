@@ -1,22 +1,19 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "/api", // Set the base URL for your API
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Optionally, add an interceptor to handle errors globally
 axiosInstance.interceptors.response.use(
-  (response) => response, // Return the response if it's successful
+  (response) => response,
   (error) => {
-    // Handle errors globally, you can add more specific error handling here
     return Promise.reject(error);
   }
 );
 
-// Reusable methods for different HTTP requests
 const api = {
   get: async (url) => {
     try {
@@ -24,7 +21,7 @@ const api = {
       return response.data;
     } catch (error) {
       console.error("GET request error:", error);
-      throw error; // rethrow to handle error in the component
+      throw error;
     }
   },
 

@@ -20,22 +20,26 @@ const DashboardPage = () => {
     done: [],
   });
 
+  // States map with titles
   const stateTitles = {
     todo: "To Do",
     inProgress: "In Progress",
     done: "Done",
   };
 
+  // Close form modal
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
   };
 
+  // Open form modal
   const handleModalOpen = (task = null) => {
     setSelectedTask(task);
     setIsModalOpen(true);
   };
 
+  // Get all tasks
   const getTasks = async () => {
     try {
       const data = await api.get("/tasks");
@@ -56,10 +60,12 @@ const DashboardPage = () => {
     }
   };
 
+  // Get tasks when session is up
   useEffect(() => {
     if (session) getTasks();
   }, [session]);
 
+  // POST and PUT function to handle submit form (add & update tasks)
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
     try {
@@ -103,6 +109,7 @@ const DashboardPage = () => {
     }
   };
 
+  // Delete tasks
   const deleteTasks = async (task) => {
     try {
       const res = await fetch(`/api/tasks/${task._id}`, { method: "DELETE" });

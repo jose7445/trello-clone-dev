@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 const LoginForm = () => {
   const router = useRouter();
 
+  // Yop validation form
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -29,6 +30,7 @@ const LoginForm = () => {
     try {
       const { email, password } = values;
 
+      // Sign In with user credentials
       const res = await signIn("credentials", {
         email,
         password,

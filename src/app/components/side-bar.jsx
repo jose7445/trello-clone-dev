@@ -10,8 +10,8 @@ export default function SideBar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Get the location pathname to set current path
   useEffect(() => {
-    // Actualiza la ruta actual cuando el componente se monta
     setCurrentPath(window.location.pathname);
   }, []);
 
