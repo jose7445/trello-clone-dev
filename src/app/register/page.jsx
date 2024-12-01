@@ -72,7 +72,7 @@ function RegisterPage() {
       <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
         <div className="text-center mb-6">
           <h2 className="text-gray-900 text-3xl font-bold mb-2">Register</h2>
-          <p className="text-gray-600 font-medium">
+          <div className="text-gray-600 font-medium">
             Do you have an account?{" "}
             <a
               href="/login"
@@ -80,7 +80,7 @@ function RegisterPage() {
             >
               Login in now!
             </a>
-          </p>
+          </div>
         </div>
 
         <Formik

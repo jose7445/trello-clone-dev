@@ -75,7 +75,7 @@ const LoginForm = () => {
           <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md">
             <div className="text-center mb-6">
               <h2 className="text-gray-900 text-3xl font-bold mb-2">Log in</h2>
-              <p className="text-gray-600 font-medium">
+              <div className="text-gray-600 font-medium">
                 No have an account?{" "}
                 <a
                   href="/register"
@@ -83,7 +83,7 @@ const LoginForm = () => {
                 >
                   Register right now!
                 </a>
-              </p>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit}>

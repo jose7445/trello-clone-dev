@@ -27,7 +27,7 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
 
       <div className="mt-3 space-y-2">
         {tasks.length === 0 ? (
-          <p className="text-neutral-700 font-semibold">No tasks to show</p>
+          <div className="text-neutral-700 font-semibold">No tasks to show</div>
         ) : (
           tasks.map((task) => (
             <div
