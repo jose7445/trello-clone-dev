@@ -71,9 +71,26 @@ const DashboardPage = () => {
 
       const res = await api[method](url, taskDataWithOwner);
 
-      toast.success(selectedTask ? "Task updated" : "Task added");
+      let newTask;
+      if (method === "post") {
+        newTask = { ...taskDataWithOwner, _id: res._id };
+      } else {
+        newTask = res.task;
+      }
 
-      getTasks();
+      if (!selectedTask) {
+        setTasks((prevTasks) => ({
+          ...prevTasks,
+          [newTask.state]: [...prevTasks[newTask.state], newTask],
+        }));
+      } else {
+        setTasks((prevTasks) => ({
+          ...prevTasks,
+          [newTask.state]: prevTasks[newTask.state].map((task) =>
+            task._id === selectedTask._id ? newTask : task
+          ),
+        }));
+      }
       handleModalClose();
     } catch (error) {
       toast.error("Error submitting task");
