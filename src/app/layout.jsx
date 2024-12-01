@@ -18,7 +18,7 @@ const barlow = Barlow({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${barlow.className} antialiased bg-slate-100`}>
         <Provider>
           <Providers>
