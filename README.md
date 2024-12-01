@@ -2,7 +2,7 @@
 
 Trello Clone is a web application built with Next.js that emulates the basic functionalities of Trello, allowing users to create, edit, and manage boards, lists, and cards. It uses various modern technologies to provide a smooth and scalable experience.
 
-## Características
+## Characteristics
 
 - User authentication with **NextAuth**.
 - Data management with **Mongoose** and **Axios**.
@@ -61,4 +61,9 @@ The following tasks could not be completed due to lack of time. However, they ar
 
 You can access the project through the following URL:
 
-[www.google.es](http://www.google.es)
+[https://trello-clone-dev.vercel.app](https://trello-clone-dev.vercel.app)
+
+## Issues
+
+- I would like to use PrimeReact but it has been very difficult to combine it with Tailwind. PrimeReact styles did not display correctly with Tailwind.
+- In the local project, Next.js tells me that I have a hydration problem, but I have not been able to find out where it comes from. The issue is: **"hydration failed because the server rendered html didn't match the client. as a result this tree will be regenerated on the client. this can happen if a ssr-ed client component used"**.
