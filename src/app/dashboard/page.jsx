@@ -71,7 +71,6 @@ const DashboardPage = () => {
     setSubmitting(true);
     try {
       const url = selectedTask ? `/tasks/${selectedTask._id}` : "/tasks";
-
       const ownerId = session.user.id;
       const taskDataWithOwner = { ...values, owner: ownerId };
 
@@ -88,19 +87,24 @@ const DashboardPage = () => {
         toast.success("Task updated successfully");
       }
 
-      if (!selectedTask) {
-        setTasks((prevTasks) => ({
-          ...prevTasks,
-          [newTask.state]: [...prevTasks[newTask.state], newTask],
-        }));
-      } else {
-        setTasks((prevTasks) => ({
-          ...prevTasks,
-          [newTask.state]: prevTasks[newTask.state].map((task) =>
-            task._id === selectedTask._id ? newTask : task
-          ),
-        }));
-      }
+      setTasks((prevTasks) => {
+        const updatedTasks = { ...prevTasks };
+
+        if (!selectedTask) {
+          updatedTasks[newTask.state] = [
+            ...updatedTasks[newTask.state],
+            newTask,
+          ];
+        } else {
+          updatedTasks[newTask.state] = updatedTasks[newTask.state].map(
+            (task) =>
+              task._id === newTask._id ? { ...task, ...newTask } : task
+          );
+        }
+
+        return updatedTasks;
+      });
+      getTasks();
       handleModalClose();
     } catch (error) {
       toast.error("Error submitting task");
