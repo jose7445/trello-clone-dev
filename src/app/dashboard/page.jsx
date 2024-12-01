@@ -2,11 +2,12 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import FormTasks from "./_components/FormTasks";
+import FormTasks from "./_components/form-task";
 import { toast } from "react-hot-toast";
-import TaskColumns from "./_components/TaskColumns";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import TaskColumns from "./_components/task-columns";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import api from "../../services/axios";
+import { FiPlus } from "react-icons/fi"; // Ícono de suma
 
 // Aquí en tu componente DashoardPage:
 const DashboardPage = () => {
@@ -19,6 +20,12 @@ const DashboardPage = () => {
     done: [],
   });
 
+  const stateTitles = {
+    todo: "To Do",
+    inProgress: "In Progress",
+    done: "Done",
+  };
+
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
@@ -27,12 +34,6 @@ const DashboardPage = () => {
   const handleModalOpen = (task = null) => {
     setSelectedTask(task);
     setIsModalOpen(true);
-  };
-
-  const stateTitles = {
-    todo: "To Do",
-    inProgress: "In Progress",
-    done: "Done",
   };
 
   const getTasks = async () => {
@@ -101,10 +102,10 @@ const DashboardPage = () => {
           My Board
         </h1>
         <Button
-          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-2 rounded"
+          className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-2 rounded flex items-center gap-2"
           onClick={() => handleModalOpen()}
         >
-          ADD TASK
+          <FiPlus />
         </Button>
       </div>
 

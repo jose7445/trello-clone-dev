@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import {
   MenuContent,
@@ -6,8 +7,9 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import AddTaskForm from "./FormTasks";
+import AddTaskForm from "./form-task";
 import { IconButton, Separator } from "@chakra-ui/react";
+import { HiDotsVertical } from "react-icons/hi";
 
 const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
   const columnColors = {
@@ -37,9 +39,9 @@ const TaskColumns = ({ title, tasks, onEdit, onDelete }) => {
               </div>
               <MenuRoot>
                 <MenuTrigger asChild>
-                  <button className="bg-transparent border border-gray-300 text-sm text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
-                    Actions
-                  </button>
+                  <IconButton aria-label="Search database">
+                    <HiDotsVertical className="text-primary" />
+                  </IconButton>
                 </MenuTrigger>
                 <MenuContent>
                   <MenuItem value="edit-task" onClick={() => onEdit(task)}>

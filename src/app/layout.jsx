@@ -1,8 +1,8 @@
 import "./globals.css";
-import Providers from "./utils/Providers";
+import Providers from "./utils/providers";
 import { Provider } from "@/components/ui/provider";
 import { Barlow } from "next/font/google";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/nav-bar";
 import { Toaster } from "react-hot-toast";
 
 export const metadata = {

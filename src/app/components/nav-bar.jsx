@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export default function NavBar() {
   const { userId, fullname, session, status } = useCurrentUser();
