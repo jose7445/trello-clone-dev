@@ -76,19 +76,45 @@ const DashboardPage = () => {
       const taskDataWithOwner = { ...values, owner: ownerId };
       const method = selectedTask ? "put" : "post";
 
-      const { _id, task } = await api[method](url, taskDataWithOwner);
+      const response = await api[method](url, taskDataWithOwner);
 
-      const newTask = method === "post" ? { ...taskDataWithOwner, _id } : task;
-      const successMessage =
-        method === "post"
-          ? "Task created successfully"
-          : "Task updated successfully";
-      toast.success(successMessage);
+      if (response && response.status === 200) {
+        const { _id, task } = response.data;
+        const newTask = task || { ...taskDataWithOwner, _id };
 
-      // Update tasks
-      updateTasksState(newTask, method);
+        const successMessage =
+          method === "post"
+            ? "Task created successfully"
+            : response.message || "Task updated successfully";
+        toast.success(successMessage);
 
-      handleModalClose();
+        setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+
+          if (method === "post") {
+            updatedTasks[newTask.state] = [
+              ...(updatedTasks[newTask.state] || []),
+              newTask,
+            ];
+          } else if (method === "put") {
+            updatedTasks[selectedTask.state] = updatedTasks[
+              selectedTask.state
+            ].filter((task) => task._id !== newTask._id);
+
+            updatedTasks[newTask.state] = [
+              ...(updatedTasks[newTask.state] || []),
+              newTask,
+            ];
+          }
+
+          return updatedTasks;
+        });
+
+        // Cerrar modal
+        handleModalClose();
+      } else {
+        toast.error("Error submitting task. Please try again.");
+      }
     } catch (error) {
       toast.error("Error submitting task");
       console.error(error);
@@ -97,48 +123,30 @@ const DashboardPage = () => {
     }
   };
 
-  // Update tasks
-  const updateTasksState = (newTask, method) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = { ...prevTasks };
-
-      // POST = new task
-      if (method === "post") {
-        updatedTasks[newTask.state] = [
-          ...(updatedTasks[newTask.state] || []),
-          newTask,
-        ];
-      }
-
-      // PUT = delete actual column task and add it to new column task
-      if (method === "put") {
-        updatedTasks[selectedTask.state] = updatedTasks[
-          selectedTask.state
-        ].filter((task) => task._id !== newTask._id);
-        updatedTasks[newTask.state] = [
-          ...(updatedTasks[newTask.state] || []),
-          newTask,
-        ];
-      }
-
-      return updatedTasks;
-    });
-  };
-
   // DELETE tasks
   const deleteTasks = async (task) => {
     try {
-      await api.delete(`/tasks/${task._id}`);
+      const response = await api.delete(`/tasks/${task._id}`);
 
-      setTasks((prevTasks) => {
-        const updatedTasks = { ...prevTasks };
-        updatedTasks[task.state] = updatedTasks[task.state].filter(
-          (t) => t._id !== task._id
-        );
-        return updatedTasks;
-      });
+      if (response && response.status === 200) {
+        const { taskId } = response.data; // Aquí obtenemos el taskId directamente
 
-      toast.success("Task deleted");
+        setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+
+          for (const state in updatedTasks) {
+            updatedTasks[state] = updatedTasks[state].filter(
+              (t) => t._id !== taskId
+            );
+          }
+
+          return updatedTasks;
+        });
+
+        toast.success(response.message || "Task deleted successfully");
+      } else {
+        toast.error("Error deleting task. Please try again.");
+      }
     } catch (error) {
       console.error("Error deleting task", error);
       toast.error("Error deleting task");

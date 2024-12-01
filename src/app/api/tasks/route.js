@@ -30,13 +30,16 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const { title, description, state, owner } = await request.json();
-
     const session = await getSessionAndConnectDB();
+
+    const { title, description, state } = await request.json();
 
     if (!title || !description || !state) {
       return NextResponse.json(
-        { message: "All fields (title, description, state) are required" },
+        {
+          message: "Missing required fields",
+          status: 400,
+        },
         { status: 400 }
       );
     }
@@ -48,18 +51,23 @@ export async function POST(request) {
       owner: session.user.id,
     });
 
-    const savedTask = await newTask.save();
+    await newTask.save();
 
-    return NextResponse.json(savedTask, { status: 201 });
+    return NextResponse.json(
+      {
+        data: newTask,
+        status: 200,
+        message: "Task created successfully",
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    if (error.name === "ValidationError") {
-      const errors = Object.values(error.errors).map((err) => err.message);
-      return NextResponse.json({ message: errors.join(", ") }, { status: 400 });
-    }
-
     console.error(error);
     return NextResponse.json(
-      { message: error.message || "An unexpected error occurred" },
+      {
+        message: error.message || "An unexpected error occurred",
+        status: 500,
+      },
       { status: 500 }
     );
   }
