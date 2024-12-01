@@ -66,40 +66,27 @@ const DashboardPage = () => {
     }
   };
 
-  // POST and PUT function to handle submit form (add & update tasks)
+  // POST and PUT methods
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
+
     try {
       const url = selectedTask ? `/tasks/${selectedTask._id}` : "/tasks";
       const ownerId = session.user.id;
       const taskDataWithOwner = { ...values, owner: ownerId };
-
       const method = selectedTask ? "put" : "post";
 
-      const updatedTask = { ...selectedTask, ...taskDataWithOwner };
+      const { _id, task } = await api[method](url, taskDataWithOwner);
 
-      setTasks((prevTasks) => {
-        const updatedTasks = { ...prevTasks };
+      const newTask = method === "post" ? { ...taskDataWithOwner, _id } : task;
+      const successMessage =
+        method === "post"
+          ? "Task created successfully"
+          : "Task updated successfully";
+      toast.success(successMessage);
 
-        updatedTasks[selectedTask.state] = updatedTasks[
-          selectedTask.state
-        ].filter((task) => task._id !== updatedTask._id);
-
-        updatedTasks[updatedTask.state] = [
-          ...(updatedTasks[updatedTask.state] || []),
-          updatedTask,
-        ];
-
-        return updatedTasks;
-      });
-
-      const res = await api[method](url, taskDataWithOwner);
-
-      if (method === "post") {
-        toast.success("Task created successfully");
-      } else {
-        toast.success("Task updated successfully");
-      }
+      // Update tasks
+      updateTasksState(newTask, method);
 
       handleModalClose();
     } catch (error) {
@@ -108,6 +95,34 @@ const DashboardPage = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Update tasks
+  const updateTasksState = (newTask, method) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = { ...prevTasks };
+
+      // POST = new task
+      if (method === "post") {
+        updatedTasks[newTask.state] = [
+          ...(updatedTasks[newTask.state] || []),
+          newTask,
+        ];
+      }
+
+      // PUT = delete actual column task and add it to new column task
+      if (method === "put") {
+        updatedTasks[selectedTask.state] = updatedTasks[
+          selectedTask.state
+        ].filter((task) => task._id !== newTask._id);
+        updatedTasks[newTask.state] = [
+          ...(updatedTasks[newTask.state] || []),
+          newTask,
+        ];
+      }
+
+      return updatedTasks;
+    });
   };
 
   // DELETE tasks
