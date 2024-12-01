@@ -39,31 +39,32 @@ const DashboardPage = () => {
     setIsModalOpen(true);
   };
 
-  // Get all tasks
+  // Get tasks when session is up
+  useEffect(() => {
+    if (session) getTasks();
+  }, [session]);
+
+  // GET all tasks
   const getTasks = async () => {
     try {
       const data = await api.get("/tasks");
 
-      const todoTasks = data.filter((task) => task.state === "todo") || [];
-      const inProgressTasks =
-        data.filter((task) => task.state === "inProgress") || [];
-      const doneTasks = data.filter((task) => task.state === "done") || [];
+      const groupedTasks = data.reduce((acc, task) => {
+        acc[task.state] = acc[task.state] || [];
+        acc[task.state].push(task);
+        return acc;
+      }, {});
 
       setTasks({
-        todo: todoTasks,
-        inProgress: inProgressTasks,
-        done: doneTasks,
+        todo: groupedTasks.todo || [],
+        inProgress: groupedTasks.inProgress || [],
+        done: groupedTasks.done || [],
       });
     } catch (error) {
       console.error("Error fetching tasks:", error);
       toast.error("Error fetching tasks");
     }
   };
-
-  // Get tasks when session is up
-  useEffect(() => {
-    if (session) getTasks();
-  }, [session]);
 
   // POST and PUT function to handle submit form (add & update tasks)
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -109,17 +110,18 @@ const DashboardPage = () => {
     }
   };
 
-  // Delete tasks
+  // DELETE tasks
   const deleteTasks = async (task) => {
     try {
-      const res = await fetch(`/api/tasks/${task._id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error(res.statusText);
+      await api.delete(`/tasks/${task._id}`);
 
-      // Eliminar la tarea del estado sin volver a cargar todo
-      setTasks((prevTasks) => ({
-        ...prevTasks,
-        [task.state]: prevTasks[task.state].filter((t) => t._id !== task._id),
-      }));
+      setTasks((prevTasks) => {
+        const updatedTasks = { ...prevTasks };
+        updatedTasks[task.state] = updatedTasks[task.state].filter(
+          (t) => t._id !== task._id
+        );
+        return updatedTasks;
+      });
 
       toast.success("Task deleted");
     } catch (error) {
